@@ -4,6 +4,8 @@ const { email } = require('./sendEmail');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// VERIFICAR SE ESTA CHEGANDO O BODY
+
 const getAllUsers = async () => {
   const allUsers = await prisma.user.findMany()
 
@@ -24,13 +26,18 @@ const getAllUsers = async () => {
   return JSON.stringify(usersJson)
 };
 
-const getOneUser = async (id) => {
-  const userById = await prisma.user.findUnique({ 
+const getOneUser = async ({name, email}) => {
+  const userById = await prisma.user.findFirst({ 
     where: {
-      id: +id
+      name: name,
+      email: email
     }
   })
-  return JSON.stringify(userById)
+  if (userById === null) {
+    return {"status": 400, "message": "Usuario não cadastrado!"}
+  } else {
+    return {"status": 200, "message": "Usuario correto!"}
+  }
 };
 
 const verifyNewUser = async (body) => {
@@ -72,6 +79,7 @@ const createNewUser = async (body) => {
       senha: hashPass
     }
   })
+
   return {"status": 200, "dados": {"name": body.name, "email": body.email}, "token": token}
 };
 
