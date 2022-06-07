@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.js"
+    "start": "src/index.js"
   },
   "devDependencies": {
     "@types/node": "^17.0.40",
