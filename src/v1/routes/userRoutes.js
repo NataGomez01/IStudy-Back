@@ -4,7 +4,7 @@ const userController = require("../../controllers/userController");
 
 router.get("/", userController.getAllUsers);
 
-router.get("/:userId", userController.getOneUser);
+router.get("/login", userController.getOneUser);
 
 router.post("/verify", userController.verifyNewUser);
 
