@@ -10,7 +10,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const getOneUser = async (req, res) => {
-  if (req.body.name === '' || req.body.email === '') {
+  if (req.body.name === undefined || req.body.email === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
   } else {
     if (req.header('Authentication') !== process.env.HEADER_AUTH) {
@@ -23,7 +23,7 @@ const getOneUser = async (req, res) => {
 };
 
 const verifyNewUser = async (req, res) => {
-  if (req.body.name === '' || req.body.email === '') {
+  if (req.body.name === undefined || req.body.email === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
   } else {
     if (req.header('Authentication') !== process.env.HEADER_AUTH) {
@@ -36,7 +36,7 @@ const verifyNewUser = async (req, res) => {
 };
 
 const createNewUser = async (req, res) => {
-  if (req.body.name === '' || req.body.email === '' || req.body.senha === '') {
+  if (req.body.name === undefined || req.body.email === undefined || req.body.senha === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
   } else {
     if (req.header('Authentication') !== process.env.HEADER_AUTH) {
@@ -49,7 +49,7 @@ const createNewUser = async (req, res) => {
 };
 
 const updateOneUser = (req, res) => {
-  if (req.body.name === '' || req.body.email === '') {
+  if (req.body.name === undefined || req.body.email === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
   } else {
     if (req.header('Authentication') !== process.env.HEADER_AUTH) {
@@ -62,7 +62,7 @@ const updateOneUser = (req, res) => {
 };
 
 const deleteOneUser = (req, res) => {
-  if (req.body.name === '' || req.body.email === '') {
+  if (req.body.name === undefined || req.body.email === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
   } else {
     if (req.header('Authentication') !== process.env.HEADER_AUTH) {
