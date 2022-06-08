@@ -10,7 +10,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const getOneUser = async (req, res) => {
-  if (req.body.name === undefined || req.body.email === undefined) {
+  if (req.body.senha === undefined || req.body.email === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
   } else {
     if (req.header('Authentication') !== process.env.HEADER_AUTH) {
