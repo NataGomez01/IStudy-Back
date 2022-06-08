@@ -27,16 +27,21 @@ const getAllUsers = async () => {
 };
 
 const getOneUser = async ({email, senha}) => {
-  const userById = await prisma.user.findFirst({ 
+  const userByDados = await prisma.user.findFirst({ 
     where: {
-      email: email,
-      senha: senha
+      email: email
     }
   })
-  if (userById === null) {
+  
+  if (userByDados == null) {
     return {"status": 400, "message": "Usuario não cadastrado!"}
   } else {
-    return {"status": 200, "message": "Usuario correto!"}
+    const isEqualPassword = await bcrypt.compare(senha, userByDados.senha)
+    if (isEqualPassword) {
+      return {"status": 200, "message": "Usuario correto!"}
+    } else {
+      return {"status": 400, "message": "Senha incorreta!"}
+    }
   }
 };
 
