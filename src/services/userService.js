@@ -26,11 +26,11 @@ const getAllUsers = async () => {
   return JSON.stringify(usersJson)
 };
 
-const getOneUser = async ({name, email}) => {
+const getOneUser = async ({email, senha}) => {
   const userById = await prisma.user.findFirst({ 
     where: {
-      name: name,
-      email: email
+      email: email,
+      senha: senha
     }
   })
   if (userById === null) {
