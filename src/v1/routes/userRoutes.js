@@ -8,6 +8,10 @@ router.post("/login", userController.getOneUser);
 
 router.post("/verify", userController.verifyNewUser);
 
+router.post("/forget", userController.verifyForgetPass)
+
+router.post("/changepass", userController.changePassword)
+
 router.post("/create", userController.createNewUser);
 
 router.patch("/:userId", userController.updateOneUser);
