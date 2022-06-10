@@ -83,25 +83,37 @@ const verifyForgetPass = async (body) => {
   if(verifyEmail !== null) {
     const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
     email(body.email, randomCode)
-    return {"status": 200, "code": randomCode}
+    return {"status": 200, "code": randomCode, "email": body.email}
   } else {
     return {"status": 400, "message":"Email não encontrado no banco de dados!"}
   }
 };
 
 const changePassword = async (body) => {
-  const hashPass = await bcrypt.hash(body.senha, 10)
-
-  await prisma.user.updateMany({
+  const userChangePass = await prisma.user.findFirst({
     where: {
       email: body.email
-    },
-    data : {
-      senha: hashPass
     }
   })
 
-  return {"status": 200, "message":"Senha atualizada com sucesso!"}
+  const isEqualPassword = await bcrypt.compare(body.senha, userChangePass.senha)
+
+  if (isEqualPassword) {
+    return {"status": 400, "message": "Sua senha tem que ser diferente da anterior!"}
+  } else {
+    const hashPass = await bcrypt.hash(body.senha, 10)
+
+    await prisma.user.updateMany({
+      where: {
+        email: body.email
+      },
+      data : {
+        senha: hashPass
+      }
+    })
+
+    return {"status": 200, "message":"Senha atualizada com sucesso!"}
+  }
 };
 
 const createNewUser = async (body) => {
