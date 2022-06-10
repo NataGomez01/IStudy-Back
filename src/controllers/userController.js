@@ -35,6 +35,19 @@ const verifyNewUser = async (req, res) => {
   }
 };
 
+const verifyForgetPass = async (req, res) => {
+  if (req.body.email === undefined) {
+    res.send({"status": 400, "message": "Dados insuficientes!"})
+  } else {
+    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
+      res.send({"status": 400, "message":"Requisição não aceita!"});
+    } else {
+      const verify = await userService.verifyForgetPass(req.body)
+      res.send(verify);
+    }
+  }
+};
+
 const createNewUser = async (req, res) => {
   if (req.body.name === undefined || req.body.email === undefined || req.body.senha === undefined) {
     res.send({"status": 400, "message": "Dados insuficientes!"})
@@ -44,6 +57,19 @@ const createNewUser = async (req, res) => {
     } else {
       const createUser = await userService.createNewUser(req.body)
       res.send(createUser);
+    }
+  }
+};
+
+const changePassword = async (req, res) => {
+  if (req.body.email === undefined || req.body.senha === undefined) {
+    res.send({"status": 400, "message": "Dados insuficientes!"})
+  } else {
+    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
+      res.send({"status": 400, "message":"Requisição não aceita!"});
+    } else {
+      const pass = await userService.changePassword(req.body)
+      res.send(pass);
     }
   }
 };
@@ -78,6 +104,8 @@ module.exports = {
   getAllUsers,
   getOneUser,
   verifyNewUser,
+  verifyForgetPass,
+  changePassword,
   createNewUser,
   updateOneUser,
   deleteOneUser,

@@ -48,7 +48,7 @@ const getOneUser = async ({email, senha}) => {
 const verifyNewUser = async (body) => {
   const verifyName = await prisma.user.findFirst({
     where: {
-      email: body.name
+      name: body.name
     }
   })
 
@@ -71,6 +71,37 @@ const verifyNewUser = async (body) => {
   email(body.email, randomCode)
 
   return {"status": 200, "code": randomCode}
+};
+
+const verifyForgetPass = async (body) => {
+  const verifyEmail = await prisma.user.findFirst({
+    where: {
+      email: body.email
+    }
+  })
+
+  if(verifyEmail !== null) {
+    const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
+    email(body.email, randomCode)
+    return {"status": 200, "code": randomCode}
+  } else {
+    return {"status": 400, "message":"Email não encontrado no banco de dados!"}
+  }
+};
+
+const changePassword = async (body) => {
+  const hashPass = await bcrypt.hash(body.senha, 10)
+
+  await prisma.user.updateMany({
+    where: {
+      email: body.email
+    },
+    data : {
+      senha: hashPass
+    }
+  })
+
+  return {"status": 200, "message":"Senha atualizada com sucesso!"}
 };
 
 const createNewUser = async (body) => {
@@ -100,6 +131,8 @@ module.exports = {
   getAllUsers,
   getOneUser,
   verifyNewUser,
+  verifyForgetPass,
+  changePassword,
   createNewUser,
   updateOneUser,
   deleteOneUser,
