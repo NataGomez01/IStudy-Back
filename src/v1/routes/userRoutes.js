@@ -1,21 +1,23 @@
 const express = require("express");
-const router = express.Router();
+const USERS = express();
+
 const userController = require("../../controllers/userController");
 
-router.get("/", userController.getAllUsers);
+const keyVerification = require("../../middlewares/keyVerification");
 
-router.post("/login", userController.getOneUser);
+USERS
+.use(keyVerification)
+// GETS
+.get('/all', userController.getAllUsers)
+.get('/', userController.getOneUser)
+// POSTS
+.post('/verify', userController.verifyNewUser)
+.post('/', userController.createNewUser)
+.post('/password', userController.verifyForgetPass)
+// PUTS
+.put('/:userId', userController.updateOneUser)
+.put('/password/:userEmail', userController.changePassword)
+// DELETES
+.delete('/:userId', userController.deleteOneUser)
 
-router.post("/verify", userController.verifyNewUser);
-
-router.post("/forget", userController.verifyForgetPass)
-
-router.post("/changepass", userController.changePassword)
-
-router.post("/create", userController.createNewUser);
-
-router.patch("/:userId", userController.updateOneUser);
-
-router.delete("/:userId", userController.deleteOneUser);
-
-module.exports = router; 
+module.exports = USERS; 

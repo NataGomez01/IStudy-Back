@@ -4,6 +4,8 @@ const { email } = require('./sendEmail');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const { errorIncorrectsDatas, errorAlreadyExists } = require('../errors/routes.errors')
+
 // VERIFICAR SE ESTA CHEGANDO O BODY
 
 const getAllUsers = async () => {
@@ -34,13 +36,13 @@ const getOneUser = async ({email, senha}) => {
   })
   
   if (userByDados == null) {
-    return {"status": 400, "message": "Usuario não cadastrado!"}
+    return errorIncorrectsDatas('usuario')
   } else {
     const isEqualPassword = await bcrypt.compare(senha, userByDados.senha)
     if (isEqualPassword) {
       return {"status": 200, "message": "Usuario correto!"}
     } else {
-      return {"status": 400, "message": "Senha incorreta!"}
+      return errorIncorrectsDatas('senha')
     }
   }
 };
@@ -59,11 +61,11 @@ const verifyNewUser = async (body) => {
   })
 
   if(verifyName !== null && verifyEmail !== null) {
-    return {"status": 400, "message": 'Nome e Email ja cadastrado!'}
+    return errorAlreadyExists('Nome e Email')
   } else if (verifyEmail !== null) {
-    return {"status": 400, "message": 'Email ja cadastrado'}
+    return errorAlreadyExists('Email')
   } else if (verifyName !== null) {
-    return {"status": 400, "message": 'Nome ja cadastrado'}
+    return errorAlreadyExists('Nome')
   }
 
   const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
@@ -85,27 +87,27 @@ const verifyForgetPass = async (body) => {
     email(body.email, randomCode)
     return {"status": 200, "code": randomCode, "email": body.email}
   } else {
-    return {"status": 400, "message":"Email não encontrado no banco de dados!"}
+    return errorIncorrectsDatas('email')
   }
 };
 
-const changePassword = async (body) => {
+const changePassword = async (senha, email) => {
   const userChangePass = await prisma.user.findFirst({
     where: {
-      email: body.email
+      email: email
     }
   })
 
-  const isEqualPassword = await bcrypt.compare(body.senha, userChangePass.senha)
+  const isEqualPassword = await bcrypt.compare(senha, userChangePass.senha)
 
   if (isEqualPassword) {
     return {"status": 400, "message": "Sua senha tem que ser diferente da anterior!"}
   } else {
-    const hashPass = await bcrypt.hash(body.senha, 10)
+    const hashPass = await bcrypt.hash(senha, 10)
 
     await prisma.user.updateMany({
       where: {
-        email: body.email
+        email: email
       },
       data : {
         senha: hashPass
