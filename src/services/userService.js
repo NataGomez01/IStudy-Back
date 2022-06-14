@@ -1,40 +1,16 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-const { email } = require('./sendEmail');
+const db = require('../db/userQuerys')
+const { sendEmail } = require('./sendEmail');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { errorIncorrectsDatas, errorAlreadyExists } = require('../errors/routes.errors')
 
-// VERIFICAR SE ESTA CHEGANDO O BODY
-
 const getAllUsers = async () => {
-  const allUsers = await prisma.user.findMany()
-
-  const usersJson = {
-    "Users": []
-  }
-
-  allUsers.map((user) => {
-    usersJson.Users.push({
-      "id": user.id,
-      "name": user.name,
-      "email": user.email,
-      "senha": user.senha,
-      "created_at": user.createdAt
-    })
-  })
-
-  return JSON.stringify(usersJson)
+  return await db.allUsers()
 };
 
 const getOneUser = async ({email, senha}) => {
-  const userByDados = await prisma.user.findFirst({ 
-    where: {
-      email: email
-    }
-  })
-  
+  const userByDados = await db.userByEmail(email)
   if (userByDados == null) {
     return errorIncorrectsDatas('usuario')
   } else {
@@ -47,18 +23,10 @@ const getOneUser = async ({email, senha}) => {
   }
 };
 
-const verifyNewUser = async (body) => {
-  const verifyName = await prisma.user.findFirst({
-    where: {
-      name: body.name
-    }
-  })
+const verifyNewUser = async ({name, email}) => {
+  const verifyName = await db.userByName(name)
 
-  const verifyEmail = await prisma.user.findFirst({
-    where: {
-      email: body.email
-    }
-  })
+  const verifyEmail = await db.userByEmail(email)
 
   if(verifyName !== null && verifyEmail !== null) {
     return errorAlreadyExists('Nome e Email')
@@ -70,33 +38,25 @@ const verifyNewUser = async (body) => {
 
   const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
 
-  email(body.email, randomCode)
+  sendEmail(email, randomCode)
 
   return {"status": 200, "code": randomCode}
 };
 
-const verifyForgetPass = async (body) => {
-  const verifyEmail = await prisma.user.findFirst({
-    where: {
-      email: body.email
-    }
-  })
+const verifyForgetPass = async ({email}) => {
+  const verifyEmail = await db.userByEmail(email)
 
   if(verifyEmail !== null) {
     const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
-    email(body.email, randomCode)
-    return {"status": 200, "code": randomCode, "email": body.email}
+    sendEmail(email, randomCode)
+    return {"status": 200, "code": randomCode, "email": email}
   } else {
     return errorIncorrectsDatas('email')
   }
 };
 
 const changePassword = async (senha, email) => {
-  const userChangePass = await prisma.user.findFirst({
-    where: {
-      email: email
-    }
-  })
+  const userChangePass = await db.userByEmail(email)
 
   const isEqualPassword = await bcrypt.compare(senha, userChangePass.senha)
 
@@ -105,32 +65,19 @@ const changePassword = async (senha, email) => {
   } else {
     const hashPass = await bcrypt.hash(senha, 10)
 
-    await prisma.user.updateMany({
-      where: {
-        email: email
-      },
-      data : {
-        senha: hashPass
-      }
-    })
+    await db.userUpdatePassword(email, hashPass)
 
     return {"status": 200, "message":"Senha atualizada com sucesso!"}
   }
 };
 
-const createNewUser = async (body) => {
-  const hashPass = await bcrypt.hash(body.senha, 10)
-  const token = jwt.sign(body.email, process.env.JWT_SECRET)
+const createNewUser = async ({email, name, senha}) => {
+  const hashPass = await bcrypt.hash(senha, 10)
+  const token = jwt.sign(email, process.env.JWT_SECRET)
 
-  await prisma.user.create({
-    data: {
-      name: body.name,
-      email: body.email,
-      senha: hashPass
-    }
-  })
+  await db.userCreate(email, name, hashPass)
 
-  return {"status": 200, "dados": {"name": body.name, "email": body.email}, "token": token}
+  return {"status": 200, "dados": {"name": name, "email": email}, "token": token}
 };
 
 const updateOneUser = () => {
