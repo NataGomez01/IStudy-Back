@@ -72,11 +72,14 @@ const changePassword = async (senha, email) => {
 };
 
 const createNewUser = async ({email, name, senha}) => {
-  const hashPass = await bcrypt.hash(senha, 10)
+  const verifyEmail = await db.userByEmail(email)
   const token = jwt.sign(email, process.env.JWT_SECRET)
 
-  await db.userCreate(email, name, hashPass)
-
+  if(verifyEmail === null) {
+    const hashPass = await bcrypt.hash(senha, 10)
+    await db.userCreate(email, name, hashPass)
+  } 
+  
   return {"status": 200, "dados": {"name": name, "email": email}, "token": token}
 };
 
