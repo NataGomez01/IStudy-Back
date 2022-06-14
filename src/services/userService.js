@@ -122,10 +122,10 @@ const createNewUser = async (body) => {
       email: body.email
     }
   })
+  const token = jwt.sign(body.email, process.env.JWT_SECRET)
   
   if (verifyEmail === null) {
     const hashPass = await bcrypt.hash(body.senha, 10)
-    const token = jwt.sign(body.email, process.env.JWT_SECRET)
 
     await prisma.user.create({
       data: {
@@ -134,9 +134,7 @@ const createNewUser = async (body) => {
         senha: hashPass
       }
     })
-  } else {
-    return {"status": 200, "message":"Usuario já existe, entrando..."}
-  }
+  } 
   
   return {"status": 200, "dados": {"name": body.name, "email": body.email}, "token": token}
 };
