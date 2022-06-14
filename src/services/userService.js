@@ -117,17 +117,27 @@ const changePassword = async (body) => {
 };
 
 const createNewUser = async (body) => {
-  const hashPass = await bcrypt.hash(body.senha, 10)
-  const token = jwt.sign(body.email, process.env.JWT_SECRET)
-
-  await prisma.user.create({
-    data: {
-      name: body.name,
-      email: body.email,
-      senha: hashPass
+  const verifyEmail = await prisma.user.findFirst({
+    where: {
+      email: body.email
     }
   })
+  
+  if (verifyEmail === null) {
+    const hashPass = await bcrypt.hash(body.senha, 10)
+    const token = jwt.sign(body.email, process.env.JWT_SECRET)
 
+    await prisma.user.create({
+      data: {
+        name: body.name,
+        email: body.email,
+        senha: hashPass
+      }
+    })
+  } else {
+    return {"status": 200, "message":"Usuario já existe, entrando..."}
+  }
+  
   return {"status": 200, "dados": {"name": body.name, "email": body.email}, "token": token}
 };
 
