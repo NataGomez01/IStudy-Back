@@ -16,7 +16,9 @@ const getOneUser = async ({email, senha}) => {
   } else {
     const isEqualPassword = await bcrypt.compare(senha, userByDados.senha)
     if (isEqualPassword) {
-      return {"status": 200, "message": "Usuario correto!"}
+      const token = jwt.sign(email, process.env.JWT_SECRET)
+
+      return {"status": 200, "data": userByDados, "token": token, "message": "Usuario correto!"}
     } else {
       return errorIncorrectsDatas('senha')
     }
@@ -71,20 +73,27 @@ const changePassword = async (senha, email) => {
   }
 };
 
-const createNewUser = async ({email, name, senha}) => {
+const createNewUser = async ({image, email, name, senha}) => {
   const verifyEmail = await db.userByEmail(email)
   const token = jwt.sign(email, process.env.JWT_SECRET)
+  let user = ''
 
   if(verifyEmail === null) {
     const hashPass = await bcrypt.hash(senha, 10)
-    await db.userCreate(email, name, hashPass)
-  } 
+    user = await db.userCreate(image ,email, name, hashPass)
+  }
   
-  return {"status": 200, "dados": {"name": name, "email": email}, "token": token}
+  return {"status": 200, "dados": user, "token": token}
 };
 
-const updateOneUser = () => {
-  return;
+const updateOneUser = async (id, name) => {
+  const userById = await db.userById(id)
+  if (userById === null) {
+    return errorIncorrectsDatas('id')
+  } else {
+    await db.userUpdateName(userById.id ,name)
+  }
+  return {"status": 200, "message": "nome trocado com sucesso!"}
 };
 
 const deleteOneUser = () => {

@@ -48,16 +48,45 @@ const userUpdatePassword = async (email, hashPass) => {
     }
 }
 
-const userCreate = async (email, name, hashPass) => {
+const userCreate = async (image, email, name, hashPass) => {
     try {
         return await prisma.user.create({
             data: {
-              name: name,
-              email: email,
-              senha: hashPass
+                image_url: image === undefined ? 'example.com' : image,
+                name: name,
+                email: email,
+                senha: hashPass
             }
           })
     } catch(err) {
+        console.log(err)
+        return err
+    }
+}
+
+const userById = async (id) => {
+    try {
+        return await prisma.user.findUnique({ 
+            where: {
+              id: Number(id)
+            }
+        })
+    } catch (err) {
+        return err
+    }
+}
+
+const userUpdateName = async (id, name) => {
+    try {
+        await prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                name: name
+            }
+        })
+    } catch (err) {
         return err
     }
 }
@@ -67,5 +96,7 @@ module.exports = {
     userByEmail,
     userByName,
     userUpdatePassword,
-    userCreate
+    userCreate,
+    userById,
+    userUpdateName
 }

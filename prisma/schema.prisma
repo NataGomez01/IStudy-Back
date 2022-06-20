@@ -10,6 +10,7 @@ datasource db {
 
 model User {
   id      Int       @id @default(autoincrement())
+  image_url String    @db.VarChar(1000)
   name    String    @db.VarChar(255)
   email   String    @db.VarChar(255)
   senha   String    @db.VarChar(255)

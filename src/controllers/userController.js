@@ -1,5 +1,5 @@
 const userService = require('../services/userService')
-const errorUndefinedBodys = require('../errors/routes.errors')
+const { errorUndefinedBodys } = require('../errors/routes.errors')
 
 const getAllUsers = async (req, res) => {
     const getAllUsers = await userService.getAllUsers()
@@ -51,12 +51,12 @@ const changePassword = async (req, res) => {
   }
 };
 
-const updateOneUser = (req, res) => {
-  if (req.body.name === undefined || req.body.email === undefined) {
+const updateOneUser = async (req, res) => {
+  if (req.body.name === undefined) {
     errorUndefinedBodys(res)
   } else {
-      const updateOneUser = userService.updateOneUser
-      res.status(updateOneUser.status).send("Atualize os dados de um usuario.");
+      const updateOneUser = await userService.updateOneUser(req.params.userId, req.body.name)
+      res.status(updateOneUser.status).send(updateOneUser);
   }
 };
 
