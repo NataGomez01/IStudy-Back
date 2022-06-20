@@ -40,9 +40,13 @@ const verifyNewUser = async ({name, email}) => {
 
   const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
 
-  sendEmail(email, randomCode)
+  const resEmail = await sendEmail(email, randomCode)
 
-  return {"status": 200, "code": randomCode}
+  if (resEmail === undefined) {
+    return {"status": 200, "code": randomCode}
+  } else {
+    return {"status": 400, "message": "Email inválido!"}
+  }
 };
 
 const verifyForgetPass = async ({email}) => {
@@ -50,8 +54,12 @@ const verifyForgetPass = async ({email}) => {
 
   if(verifyEmail !== null) {
     const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
-    sendEmail(email, randomCode)
-    return {"status": 200, "code": randomCode, "email": email}
+    const resEmail = await sendEmail(email, randomCode)
+    if (resEmail === undefined) {
+      return {"status": 200, "code": randomCode, "email": email}
+    } else {
+      return {"status": 400, "message": "Email inválido!"}
+    }  
   } else {
     return errorIncorrectsDatas('email')
   }
@@ -59,6 +67,10 @@ const verifyForgetPass = async ({email}) => {
 
 const changePassword = async (senha, email) => {
   const userChangePass = await db.userByEmail(email)
+
+  if (userChangePass === null) {
+    return errorIncorrectsDatas('email')
+  }
 
   const isEqualPassword = await bcrypt.compare(senha, userChangePass.senha)
 
@@ -74,16 +86,16 @@ const changePassword = async (senha, email) => {
 };
 
 const createNewUser = async ({image, email, name, senha}) => {
-  const verifyEmail = await db.userByEmail(email)
-  const token = jwt.sign(email, process.env.JWT_SECRET)
-  let user = ''
+    const verifyEmail = await db.userByEmail(email)
+    const token = jwt.sign(email, process.env.JWT_SECRET)
+    let user = ''
 
-  if(verifyEmail === null) {
-    const hashPass = await bcrypt.hash(senha, 10)
-    user = await db.userCreate(image ,email, name, hashPass)
-  }
-  
-  return {"status": 200, "dados": user, "token": token}
+    if(verifyEmail === null) {
+      const hashPass = await bcrypt.hash(senha, 10)
+      user = await db.userCreate(image ,email, name, hashPass)
+    }
+    
+    return {"status": 200, "dados": user, "token": token}
 };
 
 const updateOneUser = async (id, name) => {

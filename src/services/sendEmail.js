@@ -25,7 +25,6 @@ async function sendEmail(email, codigo) {
   } catch (e) {
     return e
   }
-
 }
 
 module.exports = {

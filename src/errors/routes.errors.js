@@ -1,5 +1,5 @@
 const errorUndefinedBodys = (res) => {
-    return res.send({"status": 400, "message": "Dados insuficientes!"})
+    return res.status(400).send({"status": 400, "message": "Dados insuficientes!"})
 }
 
 const errorIncorrectsDatas = (data) => {
