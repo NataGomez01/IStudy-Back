@@ -1,102 +1,71 @@
 const userService = require('../services/userService')
+const { errorUndefinedBodys } = require('../errors/routes.errors')
 
 const getAllUsers = async (req, res) => {
-  if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-    res.send({"status": 400, "message":"Requisição não aceita!"});
-  } else {
     const getAllUsers = await userService.getAllUsers()
     res.send(getAllUsers);
-  }
 };
 
 const getOneUser = async (req, res) => {
   if (req.body.senha === undefined || req.body.email === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
       const getOneUser = await userService.getOneUser(req.body)
-      res.send(getOneUser);
-    }
+      res.status(getOneUser.status).send(getOneUser)
   }
 };
 
 const verifyNewUser = async (req, res) => {
   if (req.body.name === undefined || req.body.email === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
       const verify = await userService.verifyNewUser(req.body)
-      res.send(verify);
-    }
+      res.status(verify.status).send(verify);
   }
 };
 
 const verifyForgetPass = async (req, res) => {
   if (req.body.email === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
       const verify = await userService.verifyForgetPass(req.body)
-      res.send(verify);
-    }
+      res.status(verify.status).send(verify);
   }
 };
 
 const createNewUser = async (req, res) => {
   if (req.body.name === undefined || req.body.email === undefined || req.body.senha === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
       const createUser = await userService.createNewUser(req.body)
-      res.send(createUser);
-    }
+      res.status(createUser.status).send(createUser);
   }
 };
 
 const changePassword = async (req, res) => {
-  if (req.body.email === undefined || req.body.senha === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+  if (req.body.senha === undefined) {
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
-      const pass = await userService.changePassword(req.body)
-      res.send(pass);
-    }
+      const pass = await userService.changePassword(req.body.senha, req.params.userEmail)
+      res.status(pass.status).send(pass);
   }
 };
 
-const updateOneUser = (req, res) => {
-  if (req.body.name === undefined || req.body.email === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+const updateOneUser = async (req, res) => {
+  if (req.body.name === undefined) {
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
-      const updateOneUser = userService.updateOneUser
-      res.send("Atualize os dados de um usuario.");
-    }
+      const updateOneUser = await userService.updateOneUser(req.params.userId, req.body.name)
+      res.status(updateOneUser.status).send(updateOneUser);
   }
 };
 
 const deleteOneUser = (req, res) => {
   if (req.body.name === undefined || req.body.email === undefined) {
-    res.send({"status": 400, "message": "Dados insuficientes!"})
+    errorUndefinedBodys(res)
   } else {
-    if (req.header('Authentication') !== process.env.HEADER_AUTH) {
-      res.send({"status": 400, "message":"Requisição não aceita!"});
-    } else {
       const deleteOneUser = userService.deleteOneUser
-      res.send("Delete um usuario existente.");
-    }
+      res.status(deleteOneUser.status).send("Delete um usuario existente.");
   }
 };
 

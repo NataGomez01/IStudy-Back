@@ -1,146 +1,111 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-const { email } = require('./sendEmail');
+const db = require('../db/userQuerys')
+const { sendEmail } = require('./sendEmail');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// VERIFICAR SE ESTA CHEGANDO O BODY
+const { errorIncorrectsDatas, errorAlreadyExists } = require('../errors/routes.errors')
 
 const getAllUsers = async () => {
-  const allUsers = await prisma.user.findMany()
-
-  const usersJson = {
-    "Users": []
-  }
-
-  allUsers.map((user) => {
-    usersJson.Users.push({
-      "id": user.id,
-      "name": user.name,
-      "email": user.email,
-      "senha": user.senha,
-      "created_at": user.createdAt
-    })
-  })
-
-  return JSON.stringify(usersJson)
+  return await db.allUsers()
 };
 
 const getOneUser = async ({email, senha}) => {
-  const userByDados = await prisma.user.findFirst({ 
-    where: {
-      email: email
-    }
-  })
-  
+  const userByDados = await db.userByEmail(email)
   if (userByDados == null) {
-    return {"status": 400, "message": "Usuario não cadastrado!"}
+    return errorIncorrectsDatas('usuario')
   } else {
     const isEqualPassword = await bcrypt.compare(senha, userByDados.senha)
     if (isEqualPassword) {
-      return {"status": 200, "message": "Usuario correto!"}
+      const token = jwt.sign(email, process.env.JWT_SECRET)
+
+      return {"status": 200, "data": userByDados, "token": token, "message": "Usuario correto!"}
     } else {
-      return {"status": 400, "message": "Senha incorreta!"}
+      return errorIncorrectsDatas('senha')
     }
   }
 };
 
-const verifyNewUser = async (body) => {
-  const verifyName = await prisma.user.findFirst({
-    where: {
-      name: body.name
-    }
-  })
+const verifyNewUser = async ({name, email}) => {
+  const verifyName = await db.userByName(name)
 
-  const verifyEmail = await prisma.user.findFirst({
-    where: {
-      email: body.email
-    }
-  })
+  const verifyEmail = await db.userByEmail(email)
 
   if(verifyName !== null && verifyEmail !== null) {
-    return {"status": 400, "message": 'Nome e Email ja cadastrado!'}
+    return errorAlreadyExists('Nome e Email')
   } else if (verifyEmail !== null) {
-    return {"status": 400, "message": 'Email ja cadastrado'}
+    return errorAlreadyExists('Email')
   } else if (verifyName !== null) {
-    return {"status": 400, "message": 'Nome ja cadastrado'}
+    return errorAlreadyExists('Nome')
   }
 
   const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
 
-  email(body.email, randomCode)
+  const resEmail = await sendEmail(email, randomCode)
 
-  return {"status": 200, "code": randomCode}
-};
-
-const verifyForgetPass = async (body) => {
-  const verifyEmail = await prisma.user.findFirst({
-    where: {
-      email: body.email
-    }
-  })
-
-  if(verifyEmail !== null) {
-    const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
-    email(body.email, randomCode)
-    return {"status": 200, "code": randomCode, "email": body.email}
+  if (resEmail === undefined) {
+    return {"status": 200, "code": randomCode}
   } else {
-    return {"status": 400, "message":"Email não encontrado no banco de dados!"}
+    return {"status": 400, "message": "Email inválido!"}
   }
 };
 
-const changePassword = async (body) => {
-  const userChangePass = await prisma.user.findFirst({
-    where: {
-      email: body.email
-    }
-  })
+const verifyForgetPass = async ({email}) => {
+  const verifyEmail = await db.userByEmail(email)
 
-  const isEqualPassword = await bcrypt.compare(body.senha, userChangePass.senha)
+  if(verifyEmail !== null) {
+    const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
+    const resEmail = await sendEmail(email, randomCode)
+    if (resEmail === undefined) {
+      return {"status": 200, "code": randomCode, "email": email}
+    } else {
+      return {"status": 400, "message": "Email inválido!"}
+    }  
+  } else {
+    return errorIncorrectsDatas('email')
+  }
+};
+
+const changePassword = async (senha, email) => {
+  const userChangePass = await db.userByEmail(email)
+
+  if (userChangePass === null) {
+    return errorIncorrectsDatas('email')
+  }
+
+  const isEqualPassword = await bcrypt.compare(senha, userChangePass.senha)
 
   if (isEqualPassword) {
     return {"status": 400, "message": "Sua senha tem que ser diferente da anterior!"}
   } else {
-    const hashPass = await bcrypt.hash(body.senha, 10)
+    const hashPass = await bcrypt.hash(senha, 10)
 
-    await prisma.user.updateMany({
-      where: {
-        email: body.email
-      },
-      data : {
-        senha: hashPass
-      }
-    })
+    await db.userUpdatePassword(email, hashPass)
 
     return {"status": 200, "message":"Senha atualizada com sucesso!"}
   }
 };
 
-const createNewUser = async (body) => {
-  const verifyEmail = await prisma.user.findFirst({
-    where: {
-      email: body.email
-    }
-  })
-  const token = jwt.sign(body.email, process.env.JWT_SECRET)
-  
-  if (verifyEmail === null) {
-    const hashPass = await bcrypt.hash(body.senha, 10)
+const createNewUser = async ({image, email, name, senha}) => {
+    const verifyEmail = await db.userByEmail(email)
+    const token = jwt.sign(email, process.env.JWT_SECRET)
+    let user = ''
 
-    await prisma.user.create({
-      data: {
-        name: body.name,
-        email: body.email,
-        senha: hashPass
-      }
-    })
-  } 
-  
-  return {"status": 200, "dados": {"name": body.name, "email": body.email}, "token": token}
+    if(verifyEmail === null) {
+      const hashPass = await bcrypt.hash(senha, 10)
+      user = await db.userCreate(image ,email, name, hashPass)
+    }
+    
+    return {"status": 200, "dados": user, "token": token}
 };
 
-const updateOneUser = () => {
-  return;
+const updateOneUser = async (id, name) => {
+  const userById = await db.userById(id)
+  if (userById === null) {
+    return errorIncorrectsDatas('id')
+  } else {
+    await db.userUpdateName(userById.id ,name)
+  }
+  return {"status": 200, "message": "nome trocado com sucesso!"}
 };
 
 const deleteOneUser = () => {
