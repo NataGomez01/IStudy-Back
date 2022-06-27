@@ -9,7 +9,7 @@ USERS
 .use(keyVerification)
 // GETS
 .get('/all', userController.getAllUsers)
-.get('/', userController.getOneUser)
+.post('/login', userController.getOneUser)
 // POSTS
 .post('/verify', userController.verifyNewUser)
 .post('/', userController.createNewUser)
