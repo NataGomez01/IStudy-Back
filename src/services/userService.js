@@ -65,6 +65,19 @@ const verifyForgetPass = async ({email}) => {
   }
 };
 
+const verifyToken = async (token) => {
+  const resToken = jwt.verify(token, process.env.JWT_SECRET, function(err) {
+    if (err) return false
+  })
+
+  if(resToken === undefined) {
+    return {"status": 200, "message": "Token valido!"} 
+  } else {
+    return {"status": 400, "message": "Token invalido!"}
+  }  
+  
+};
+
 const changePassword = async (senha, email) => {
   const userChangePass = await db.userByEmail(email)
 
@@ -118,6 +131,7 @@ module.exports = {
   verifyNewUser,
   verifyForgetPass,
   changePassword,
+  verifyToken,
   createNewUser,
   updateOneUser,
   deleteOneUser,
