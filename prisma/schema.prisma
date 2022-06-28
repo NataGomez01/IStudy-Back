@@ -2,11 +2,14 @@ generator client {
   provider = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
 }
+
 datasource db {
   provider = "mysql"
   url = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
+
+// USERS DB
 
 model User {
   id      Int       @id @default(autoincrement())
@@ -14,5 +17,74 @@ model User {
   name    String    @db.VarChar(255)
   email   String    @db.VarChar(255)
   senha   String    @db.VarChar(255)
+  statistics Statiscs[]
+  cards   User_Cards[]
   createdAt   DateTime    @default(now())
+}
+
+model Statiscs {
+  id    Int   @id @default(autoincrement())
+  user    User    @relation(fields: [id_User], references: [id])
+  id_User   Int
+  wins      Int
+  loses     Int
+  playeds   Int
+  medals    Medals[]
+}
+
+model Medals {
+  id    Int   @id @default(autoincrement())
+  medal   Statiscs    @relation(fields: [id_Statistics], references: [id])
+  id_Statistics   Int
+  image_icon    String    @db.VarChar(1000)
+  title   String    @db.VarChar(255)
+}
+
+model User_Cards {
+  id    Int   @id @default(autoincrement())
+  user    User    @relation(fields: [id_User], references: [id])
+  id_User   Int
+  category    User_Category    @relation(fields: [id_Category], references: [id]) 
+  id_Category   Int
+  image_url String    @db.VarChar(1000)
+  title   String    @db.VarChar(255)
+  answer    String 
+  createdAt   DateTime    @default(now())
+}
+
+model User_Category {
+  id    Int   @id @default(autoincrement())
+  user_cards    User_Cards[]
+  name    String    @db.VarChar(255)
+}
+
+// CARDS
+
+model Cards {
+  id    Int   @id @default(autoincrement())
+  category    Category    @relation(fields: [id_Category], references: [id]) 
+  id_Category   Int
+  image_url String    @db.VarChar(1000)
+  title   String    @db.VarChar(255)
+  questions   Questions[]
+  played_times    Int
+  createdAt   DateTime    @default(now())
+}
+
+model Category {
+  id    Int   @id @default(autoincrement())
+  cards   Cards[]
+  name    String    @db.VarChar(255)
+}
+
+model Questions {
+  id    Int   @id @default(autoincrement())
+  card    Cards    @relation(fields: [id_Card], references: [id]) 
+  id_Card Int
+  text    String    @db.VarChar(255)
+  letter_a    String    @db.VarChar(255)
+  letter_b    String    @db.VarChar(255)
+  letter_c    String    @db.VarChar(255)
+  letter_d    String    @db.VarChar(255)
+  correct_letter    String   @db.VarChar(1)
 }

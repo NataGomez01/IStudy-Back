@@ -8,7 +8,7 @@ const s3 = new aws.S3({
     secretAccessKey: process.env.SPACES_SECRET_ACCESS_KEY
 })
 
-const uploadImage = async (imageUrl) => {
+const uploadImage = async (image) => {
     const key = `${Date.now()}.png`
 
     const s3Params = {
