@@ -14,6 +14,7 @@ USERS
 .post('/verify', userController.verifyNewUser)
 .post('/', userController.createNewUser)
 .post('/password', userController.verifyForgetPass)
+.post('/token', userController.verifyToken)
 // PUTS
 .put('/:userId', userController.updateOneUser)
 .put('/password/:userEmail', userController.changePassword)

@@ -33,6 +33,15 @@ const verifyForgetPass = async (req, res) => {
   }
 };
 
+const verifyToken = async (req, res) => {
+  if (req.body.token === undefined) {
+    errorUndefinedBodys(res)
+  } else {
+      const verify = await userService.verifyToken(req.body.token)
+      res.status(verify.status).send(verify);
+  }
+};
+
 const createNewUser = async (req, res) => {
   if (req.body.name === undefined || req.body.email === undefined || req.body.senha === undefined) {
     errorUndefinedBodys(res)
@@ -75,6 +84,7 @@ module.exports = {
   verifyNewUser,
   verifyForgetPass,
   changePassword,
+  verifyToken,
   createNewUser,
   updateOneUser,
   deleteOneUser,
