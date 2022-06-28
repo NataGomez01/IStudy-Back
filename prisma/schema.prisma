@@ -29,13 +29,13 @@ model Statiscs {
   wins      Int
   loses     Int
   playeds   Int
-  medals    Medals[]
+  medals   Medals    @relation(fields: [id_Medals], references: [id])
+  id_Medals   Int
 }
 
 model Medals {
   id    Int   @id @default(autoincrement())
-  medal   Statiscs    @relation(fields: [id_Statistics], references: [id])
-  id_Statistics   Int
+  statistics    Statiscs[]
   image_icon    String    @db.VarChar(1000)
   title   String    @db.VarChar(255)
 }
