@@ -91,6 +91,18 @@ const userUpdateName = async (id, name) => {
     }
 }
 
+const deleteUser = async (id) => {
+    try {
+        await prisma.user.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+    } catch (err) {
+        return err
+    }
+}
+
 module.exports = {
     allUsers,
     userByEmail,
@@ -98,5 +110,6 @@ module.exports = {
     userUpdatePassword,
     userCreate,
     userById,
-    userUpdateName
+    userUpdateName,
+    deleteUser
 }

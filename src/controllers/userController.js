@@ -69,13 +69,9 @@ const updateOneUser = async (req, res) => {
   }
 };
 
-const deleteOneUser = (req, res) => {
-  if (req.body.name === undefined || req.body.email === undefined) {
-    errorUndefinedBodys(res)
-  } else {
-      const deleteOneUser = userService.deleteOneUser
-      res.status(deleteOneUser.status).send("Delete um usuario existente.");
-  }
+const deleteOneUser = async (req, res) => {
+  const deleteUser = await userService.deleteOneUser(req.params.userId)
+  res.status(deleteUser.status).send(deleteUser);
 };
 
 module.exports = {
