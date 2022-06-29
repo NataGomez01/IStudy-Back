@@ -116,13 +116,25 @@ const updateOneUser = async (id, name) => {
   if (userById === null) {
     return errorIncorrectsDatas('id')
   } else {
-    await db.userUpdateName(userById.id ,name)
+    const haveSameName = await db.userByName(name)
+    if (userById.name === name || haveSameName != null) {
+      return {"status": 400, "message": "O nome tem que ser diferente do anterior, ou nome ja cadastrado!"}
+    } else {
+      await db.userUpdateName(userById.id ,name)
+    }    
   }
   return {"status": 200, "message": "nome trocado com sucesso!"}
 };
 
-const deleteOneUser = () => {
-  return;
+const deleteOneUser = async (id) => {
+  const userById = await db.userById(id)
+  
+  if (userById === null ) {
+    return errorIncorrectsDatas('id')
+  } else {
+    await db.deleteUser(id)
+  }
+  return {"status": 200, "message": "Usuario deletado."}
 };
 
 module.exports = {
