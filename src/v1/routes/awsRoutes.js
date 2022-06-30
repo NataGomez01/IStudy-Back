@@ -4,6 +4,6 @@ const AWS = express();
 const awsController = require("../../controllers/awsController")
 
 AWS
-.post("/upload/:userId", awsController.uploadImage)
+.post("/upload", awsController.uploadImage)
 
 module.exports = AWS;
