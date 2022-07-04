@@ -18,6 +18,7 @@ USERS
 // PUTS
 .put('/:userId', userController.updateOneUser)
 .put('/password/:userEmail', userController.changePassword)
+.put('/image/:userId', userController.updateImage)
 // DELETES
 .delete('/:userId', userController.deleteOneUser)
 

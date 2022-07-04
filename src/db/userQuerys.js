@@ -91,6 +91,21 @@ const userUpdateName = async (id, name) => {
     }
 }
 
+const userUpdateImage = async (id, image) => {
+    try {
+        await prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                image_url: image
+            }
+        })
+    } catch (err) {
+        return err
+    }
+}
+
 const deleteUser = async (id) => {
     try {
         await prisma.user.delete({
@@ -111,5 +126,6 @@ module.exports = {
     userCreate,
     userById,
     userUpdateName,
+    userUpdateImage,
     deleteUser
 }
