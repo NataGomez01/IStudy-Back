@@ -52,7 +52,7 @@ const userCreate = async (image, email, name, hashPass) => {
     try {
         return await prisma.user.create({
             data: {
-                image_url: image === undefined ? 'example.com' : image,
+                image_url: image === undefined ? 'https://istudy.sfo3.digitaloceanspaces.com/1656957335805.png' : image,
                 name: name,
                 email: email,
                 senha: hashPass
