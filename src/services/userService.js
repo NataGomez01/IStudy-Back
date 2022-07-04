@@ -126,6 +126,16 @@ const updateOneUser = async (id, name) => {
   return {"status": 200, "message": "nome trocado com sucesso!"}
 };
 
+const updateImage = async (id, image) => {
+  const userById = await db.userById(id)
+  if (userById === null) {
+    return errorIncorrectsDatas('id')
+  } else {
+      await db.userUpdateImage(userById.id ,image)
+  }    
+  return {"status": 200, "message": "Imagem atualizada!"}
+};
+
 const deleteOneUser = async (id) => {
   const userById = await db.userById(id)
   
@@ -146,5 +156,6 @@ module.exports = {
   verifyToken,
   createNewUser,
   updateOneUser,
+  updateImage,
   deleteOneUser,
 };

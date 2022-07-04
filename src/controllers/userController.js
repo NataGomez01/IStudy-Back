@@ -69,6 +69,15 @@ const updateOneUser = async (req, res) => {
   }
 };
 
+const updateImage = async (req, res) => {
+  if (req.body.image === undefined) {
+    errorUndefinedBodys(res)
+  } else {
+      const updateImage = await userService.updateImage(req.params.userId, req.body.image)
+      res.status(updateImage.status).send(updateImage);
+  }
+};
+
 const deleteOneUser = async (req, res) => {
   const deleteUser = await userService.deleteOneUser(req.params.userId)
   res.status(deleteUser.status).send(deleteUser);
@@ -83,5 +92,6 @@ module.exports = {
   verifyToken,
   createNewUser,
   updateOneUser,
+  updateImage,
   deleteOneUser,
 };
