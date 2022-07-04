@@ -118,7 +118,7 @@ const updateOneUser = async (id, name) => {
   } else {
     const haveSameName = await db.userByName(name)
     if (userById.name === name || haveSameName != null) {
-      return {"status": 400, "message": "O nome tem que ser diferente do anterior, ou nome ja cadastrado!"}
+      return {"status": 200, "message": "O nome tem que ser diferente do anterior, ou nome ja cadastrado!"}
     } else {
       await db.userUpdateName(userById.id ,name)
     }    
