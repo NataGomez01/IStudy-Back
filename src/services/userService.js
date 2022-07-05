@@ -15,10 +15,17 @@ const getOneUser = async ({email, senha}) => {
     return errorIncorrectsDatas('usuario')
   } else {
     const isEqualPassword = await bcrypt.compare(senha, userByDados.senha)
+    const statistics = await db.statisticsById(userByDados.id)
     if (isEqualPassword) {
       const token = jwt.sign(email, process.env.JWT_SECRET)
 
-      return {"status": 200, "data": userByDados, "token": token, "message": "Usuario correto!"}
+      return {
+        "status": 200, 
+        "data": userByDados,
+        "statistics": statistics, 
+        "token": token, 
+        "message": "Usuario correto!"
+      }
     } else {
       return errorIncorrectsDatas('senha')
     }
@@ -102,13 +109,20 @@ const createNewUser = async ({image, email, name, senha}) => {
     const verifyEmail = await db.userByEmail(email)
     const token = jwt.sign(email, process.env.JWT_SECRET)
     let user = ''
+    let statistics = ''
 
     if(verifyEmail === null) {
       const hashPass = await bcrypt.hash(senha, 10)
       user = await db.userCreate(image ,email, name, hashPass)
+      statistics = await db.statisticsById(user.id)
     }
     
-    return {"status": 200, "dados": user, "token": token}
+    return {
+      "status": 200, 
+      "dados": user,
+      "statistics": statistics, 
+      "token": token
+    }
 };
 
 const updateOneUser = async (id, name) => {
