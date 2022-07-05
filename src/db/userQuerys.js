@@ -55,11 +55,37 @@ const userCreate = async (image, email, name, hashPass) => {
                 image_url: image === undefined ? 'https://istudy.sfo3.digitaloceanspaces.com/1656957335805.png' : image,
                 name: name,
                 email: email,
-                senha: hashPass
+                senha: hashPass,
+                statistics: {
+                    create: [
+                        {
+                            wins: 0,
+                            loses: 0,
+                            playeds: 0,
+                            medals: {
+                                connect: {
+                                    id: 1
+                                },
+                            }
+                        }
+                    ]
+                }
             }
           })
     } catch(err) {
         console.log(err)
+        return err
+    }
+}
+
+const statisticsById = async (id) => {
+    try {
+        return await prisma.statiscs.findUnique({ 
+            where: {
+              id: Number(id)
+            }
+        })
+    } catch (err) {
         return err
     }
 }
@@ -126,6 +152,7 @@ module.exports = {
     userCreate,
     userById,
     userUpdateName,
+    statisticsById,
     userUpdateImage,
     deleteUser
 }
