@@ -45,7 +45,7 @@ const verifyNewUser = async ({name, email}) => {
   if (resEmail === undefined) {
     return {"status": 200, "code": randomCode}
   } else {
-    return {"status": 400, "message": "Email inválido!"}
+    return {"status": 200, "message": "Email inválido!"}
   }
 };
 
@@ -58,7 +58,7 @@ const verifyForgetPass = async ({email}) => {
     if (resEmail === undefined) {
       return {"status": 200, "code": randomCode, "email": email}
     } else {
-      return {"status": 400, "message": "Email inválido!"}
+      return {"status": 200, "message": "Email inválido!"}
     }  
   } else {
     return errorIncorrectsDatas('email')
@@ -73,7 +73,7 @@ const verifyToken = async (token) => {
   if(resToken === undefined) {
     return {"status": 200, "message": "Token valido!"} 
   } else {
-    return {"status": 400, "message": "Token invalido!"}
+    return {"status": 200, "message": "Token invalido!"}
   }  
   
 };
@@ -88,7 +88,7 @@ const changePassword = async (senha, email) => {
   const isEqualPassword = await bcrypt.compare(senha, userChangePass.senha)
 
   if (isEqualPassword) {
-    return {"status": 400, "message": "Sua senha tem que ser diferente da anterior!"}
+    return {"status": 200, "message": "Sua senha tem que ser diferente da anterior!"}
   } else {
     const hashPass = await bcrypt.hash(senha, 10)
 
