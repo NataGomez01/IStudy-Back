@@ -122,7 +122,7 @@ const createNewUser = async ({image, email, name, senha}) => {
     
     return {
       "status": 200, 
-      "dados": user,
+      "data": user,
       "statistics": statistics, 
       "token": token
     }
