@@ -115,6 +115,9 @@ const createNewUser = async ({image, email, name, senha}) => {
       const hashPass = await bcrypt.hash(senha, 10)
       user = await db.userCreate(image ,email, name, hashPass)
       statistics = await db.statisticsById(user.id)
+    } else {
+      user = verifyEmail
+      statistics = await db.statisticsById(user.id)
     }
     
     return {
