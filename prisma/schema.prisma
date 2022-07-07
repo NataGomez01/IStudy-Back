@@ -29,8 +29,7 @@ model Statiscs {
   wins      Int
   loses     Int
   playeds   Int
-  medals   Medals    @relation(fields: [id_Medals], references: [id])
-  id_Medals   Int
+  medals   Medals[]
 }
 
 model Medals {
@@ -38,6 +37,7 @@ model Medals {
   statistics    Statiscs[]
   image_icon    String    @db.VarChar(1000)
   title   String    @db.VarChar(255)
+  desc    String    @db.VarChar(1000)
 }
 
 model User_Cards {

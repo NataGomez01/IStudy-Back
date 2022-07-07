@@ -6,6 +6,16 @@ const getAllUsers = async (req, res) => {
     res.send(getAllUsers);
 };
 
+const getAllMedals = async (req, res) => {
+  const getAllMedals = await userService.getAllMedals()
+  res.send(getAllMedals);
+};
+
+const getUserMedals = async (req, res) => {
+  const getUserMedals = await userService.getUserMedals(req.params.userId)
+  res.send(getUserMedals);
+};
+
 const getOneUser = async (req, res) => {
   if (req.body.senha === undefined || req.body.email === undefined) {
     errorUndefinedBodys(res)
@@ -69,6 +79,15 @@ const updateOneUser = async (req, res) => {
   }
 };
 
+const updateMedals = async (req, res) => {
+  if (req.body.id_medal === undefined) {
+    errorUndefinedBodys(res)
+  } else {
+      const updateUserMedals = await userService.updateUserMedal(req.params.userId, req.body.id_medal)
+      res.status(updateUserMedals.status).send(updateUserMedals);
+  }
+};
+
 const updateImage = async (req, res) => {
   if (req.body.image === undefined) {
     errorUndefinedBodys(res)
@@ -85,10 +104,13 @@ const deleteOneUser = async (req, res) => {
 
 module.exports = {
   getAllUsers,
+  getAllMedals,
+  getUserMedals,
   getOneUser,
   verifyNewUser,
   verifyForgetPass,
   changePassword,
+  updateMedals,
   verifyToken,
   createNewUser,
   updateOneUser,
