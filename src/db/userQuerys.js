@@ -37,10 +37,30 @@ const userUpdatePassword = async (email, hashPass) => {
     try {
         return await prisma.user.updateMany({
             where: {
-            email: email
+                email: email
             },
             data : {
-            senha: hashPass
+                senha: hashPass
+            }
+        })
+    } catch (err) {
+        return err
+    }
+}
+
+const userUpdateMedal = async (id, id_medal) => {
+    const newId = Number(id) - 1
+    try {
+        return await prisma.statiscs.update({
+            where: {
+                id: Number(newId)
+            },
+            data : {
+                medals: {
+                    connect: {
+                        id: Number(id_medal)
+                    }
+                }
             }
         })
     } catch (err) {
@@ -61,12 +81,7 @@ const userCreate = async (image, email, name, hashPass) => {
                         {
                             wins: 0,
                             loses: 0,
-                            playeds: 0,
-                            medals: {
-                                connect: {
-                                    id: 1
-                                },
-                            }
+                            playeds: 0
                         }
                     ]
                 }
@@ -80,12 +95,29 @@ const userCreate = async (image, email, name, hashPass) => {
 
 const statisticsById = async (id) => {
     try {
-        return await prisma.statiscs.findUnique({ 
+        return await prisma.statiscs.findMany({ 
             where: {
-              id: Number(id)
+              id_User: Number(id)
             }
         })
     } catch (err) {
+        console.log(err)
+        return err
+    }
+}
+
+const userMedals = async (id) => {
+    try {
+        return await prisma.statiscs.findMany({ 
+            where: {
+              id_User: Number(id)
+            },
+            select: {
+                medals
+            }
+        })
+    } catch (err) {
+        console.log(err)
         return err
     }
 }
@@ -144,6 +176,14 @@ const deleteUser = async (id) => {
     }
 }
 
+const medals = async () => {
+    try {
+        return await prisma.medals.findMany()
+    } catch (err) {
+        return err
+    }
+}
+
 module.exports = {
     allUsers,
     userByEmail,
@@ -152,7 +192,10 @@ module.exports = {
     userCreate,
     userById,
     userUpdateName,
+    userUpdateMedal,
     statisticsById,
+    userMedals,
     userUpdateImage,
-    deleteUser
+    deleteUser,
+    medals
 }

@@ -9,6 +9,19 @@ const getAllUsers = async () => {
   return await db.allUsers()
 };
 
+const getAllMedals = async () => {
+  return await db.medals()
+};
+
+const getUserMedals = async (id) => {
+  const userById = await db.userById(id)
+  if (userById === null) {
+    return errorIncorrectsDatas('id')
+  } else {
+    return await db.userMedals(id)
+  }
+};
+
 const getOneUser = async ({email, senha}) => {
   const userByDados = await db.userByEmail(email)
   if (userByDados == null) {
@@ -143,6 +156,19 @@ const updateOneUser = async (id, name) => {
   return {"status": 200, "message": "nome trocado com sucesso!"}
 };
 
+const updateUserMedal = async (id, id_medal) => {
+  const userById = await db.userById(id)
+  let userMedals = 'Sucesso'
+  let res = ''
+  if (userById === null) {
+    return errorIncorrectsDatas('id')
+  } else {
+    res = await db.userUpdateMedal(id, id_medal)
+    userMedals = await db.userMedals(id)
+  }
+  return {"status": 200, "achievements": userMedals, res}
+};
+
 const updateImage = async (id, image) => {
   const userById = await db.userById(id)
   if (userById === null) {
@@ -166,11 +192,14 @@ const deleteOneUser = async (id) => {
 
 module.exports = {
   getAllUsers,
+  getAllMedals,
+  getUserMedals,
   getOneUser,
   verifyNewUser,
   verifyForgetPass,
   changePassword,
   verifyToken,
+  updateUserMedal,
   createNewUser,
   updateOneUser,
   updateImage,
