@@ -2,7 +2,7 @@ import { Response } from "express";
 
 export class routesError {
     errorUndefinedBodys(res: Response) {
-        return res.status(201).send({"status": 201, "message": "Dados insuficientes!"})
+        return res.status(201).json({"status": 201, "message": "Dados insuficientes!"})
     }
     
     errorIncorrectsDatas(data: String) {

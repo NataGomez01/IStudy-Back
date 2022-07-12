@@ -8,17 +8,17 @@ const service = new userService()
 export class userController {
   async getAllUsers(req: Request, res: Response): Promise<void> {
     const getAllUsers = await service.getAllUsers()
-    res.send(getAllUsers);
+    res.json(getAllUsers);
   };
 
   async getAllMedals(req: Request, res: Response): Promise<void> {
     const getAllMedals = await service.getAllMedals()
-    res.send(getAllMedals);
+    res.json(getAllMedals);
   };
   
   async getUserMedals(req: Request, res: Response): Promise<void> {
     const getUserMedals = await service.getUserMedals(Number(req.params.userId))
-    res.send(getUserMedals);
+    res.json(getUserMedals);
   };
   
   async getOneUser(req: Request, res: Response): Promise<void> {
@@ -26,7 +26,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const getOneUser = await service.getOneUser(req.body)
-        res.status(getOneUser.status).send(getOneUser)
+        res.status(getOneUser.status).json(getOneUser)
     }
   };
   
@@ -35,7 +35,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const verify = await service.verifyNewUser(req.body)
-        res.status(verify.status).send(verify);
+        res.status(verify.status).json(verify);
     }
   };
   
@@ -44,7 +44,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const verify = await service.verifyForgetPass(req.body)
-        res.status(verify.status).send(verify);
+        res.status(verify.status).json(verify);
     }
   };
   
@@ -53,7 +53,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const verify = await service.verifyToken(req.body.token)
-        res.status(verify.status).send(verify);
+        res.status(verify.status).json(verify);
     }
   };
   
@@ -62,7 +62,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const createUser = await service.createNewUser(req.body)
-        res.status(createUser.status).send(createUser);
+        res.status(createUser.status).json(createUser);
     }
   };
   
@@ -71,7 +71,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const pass = await service.changePassword(req.body.senha, req.params.userEmail)
-        res.status(pass.status).send(pass);
+        res.status(pass.status).json(pass);
     }
   };
   
@@ -80,7 +80,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const updateOneUser = await service.updateOneUser(Number(req.params.userId), req.body.name)
-        res.status(updateOneUser.status).send(updateOneUser);
+        res.status(updateOneUser.status).json(updateOneUser);
     }
   };
   
@@ -89,7 +89,7 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const updateUserMedals = await service.updateUserMedal(Number(req.params.userId), req.body.id_medal)
-        res.status(updateUserMedals.status).send(updateUserMedals);
+        res.status(updateUserMedals.status).json(updateUserMedals);
     }
   };
   
@@ -98,13 +98,13 @@ export class userController {
       error.errorUndefinedBodys(res)
     } else {
         const updateImage = await service.updateImage(Number(req.params.userId), req.body.image)
-        res.status(updateImage.status).send(updateImage);
+        res.status(updateImage.status).json(updateImage);
     }
   };
   
   async deleteOneUser(req: Request, res: Response): Promise<void> {
     const deleteUser = await service.deleteOneUser(Number(req.params.userId))
-    res.status(deleteUser.status).send(deleteUser);
+    res.status(deleteUser.status).json(deleteUser);
   };
 }
 
