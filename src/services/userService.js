@@ -90,7 +90,7 @@ const verifyToken = async (token) => {
   })
 
   if(resToken === undefined) {
-    return {"status": 200, "message": "Token valido!"} 
+    return {"status": 200} 
   } else {
     return {"status": 201, "message": "Token invalido!"}
   }  
