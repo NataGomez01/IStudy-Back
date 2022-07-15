@@ -36,8 +36,7 @@ const getOneUser = async ({email, senha}) => {
         "status": 200, 
         "data": userByDados,
         "statistics": statistics, 
-        "token": token, 
-        "message": "Usuario correto!"
+        "token": token
       }
     } else {
       return errorIncorrectsDatas('senha')
