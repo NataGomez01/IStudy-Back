@@ -8,12 +8,12 @@ const getAllUsers = async (req, res) => {
 
 const getAllMedals = async (req, res) => {
   const getAllMedals = await userService.getAllMedals()
-  res.send(getAllMedals);
+  res.send({"status": 200, getAllMedals});
 };
 
 const getUserMedals = async (req, res) => {
   const getUserMedals = await userService.getUserMedals(req.params.userId)
-  res.send(getUserMedals);
+  res.send({"status": 200, getUserMedals});
 };
 
 const getOneUser = async (req, res) => {
