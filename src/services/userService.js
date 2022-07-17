@@ -18,7 +18,24 @@ const getUserMedals = async (id) => {
   if (userById === null) {
     return errorIncorrectsDatas('id')
   } else {
-    return await db.userMedals(id)
+    const userMedals = await db.userMedals(id)
+    const allMedals = await db.medals()
+    const idsUserMedals = []
+
+    for (let i = 0; i < userMedals[0].medals.length; i++) {
+      idsUserMedals.push(userMedals[0].medals[i].id)
+    }
+
+    function dontHaveMedal(medal) {
+      return !idsUserMedals.includes(medal.id)
+    }
+
+    const filteredMedals = allMedals.filter(dontHaveMedal)
+    return {
+      "status": 200,
+      "userMedals": userMedals[0].medals,
+      "userNotHaveMedals": filteredMedals
+    }
   }
 };
 
