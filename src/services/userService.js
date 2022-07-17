@@ -31,10 +31,13 @@ const getUserMedals = async (id) => {
     }
 
     const filteredMedals = allMedals.filter(dontHaveMedal)
+    const porncentConcluedMedals = Math.round((userMedals[0].medals.length / allMedals.length) * 100)
+    console.log(porncentConcluedMedals)
     return {
       "status": 200,
       "userMedals": userMedals[0].medals,
-      "userNotHaveMedals": filteredMedals
+      "userNotHaveMedals": filteredMedals,
+      "porcent": porncentConcluedMedals
     }
   }
 };
