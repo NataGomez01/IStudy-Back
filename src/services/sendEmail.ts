@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 // async..await is not allowed in global scope, must use a wrapper
-async function sendEmail(email, codigo) {
+export async function sendEmail(email: string, codigo: number) {
   try {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
@@ -27,6 +27,3 @@ async function sendEmail(email, codigo) {
   }
 }
 
-module.exports = {
-  sendEmail
-}

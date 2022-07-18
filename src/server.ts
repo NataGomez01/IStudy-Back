@@ -1,5 +1,5 @@
-const express = require("express"); 
-const v1UserRouter = require("./v1/routes/userRoutes");
+import express from 'express'; 
+import { USERS as v1UserRouter} from './v1/routes/userRoutes';
 
 const app = express(); 
 
