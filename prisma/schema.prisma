@@ -44,26 +44,18 @@ model User_Cards {
   id    Int   @id @default(autoincrement())
   user    User    @relation(fields: [id_User], references: [id])
   id_User   Int
-  category    User_Category    @relation(fields: [id_Category], references: [id]) 
-  id_Category   Int
+  category    Categorys[]
   image_url String    @db.VarChar(1000)
   title   String    @db.VarChar(255)
   answer    String 
   createdAt   DateTime    @default(now())
 }
 
-model User_Category {
-  id    Int   @id @default(autoincrement())
-  user_cards    User_Cards[]
-  name    String    @db.VarChar(255)
-}
-
 // CARDS
 
 model Cards {
   id    Int   @id @default(autoincrement())
-  category    Category    @relation(fields: [id_Category], references: [id]) 
-  id_Category   Int
+  category    Categorys[]
   image_url String    @db.VarChar(1000)
   title   String    @db.VarChar(255)
   questions   Questions[]
@@ -71,9 +63,10 @@ model Cards {
   createdAt   DateTime    @default(now())
 }
 
-model Category {
+model Categorys {
   id    Int   @id @default(autoincrement())
   cards   Cards[]
+  user_cards    User_Cards[]
   name    String    @db.VarChar(255)
 }
 
