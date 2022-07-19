@@ -45,10 +45,18 @@ model User_Cards {
   user    User    @relation(fields: [id_User], references: [id])
   id_User   Int
   category    Categorys[]
+  title   String @db.VarChar(255)
   image_url String    @db.VarChar(1000)
-  title   String    @db.VarChar(255)
-  answer    String 
+  card_Answer   Answers[]
   createdAt   DateTime    @default(now())
+}
+
+model Answers {
+  id    Int   @id @default(autoincrement())
+  card_Answer    User_Cards    @relation(fields: [id_Card], references: [id])
+  id_Card   Int
+  question   String    @db.VarChar(255)
+  answer    String 
 }
 
 // CARDS
