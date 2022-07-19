@@ -6,11 +6,11 @@ import { routesError } from '../errors/routes.errors';
 const error = new routesError()
 
 interface card {
-    image: string;
     id_user: number, 
     id_category: number, 
     title : string, 
-    answer: string
+    answer: string,
+    image: string,
   }
 
 export class cardsService {

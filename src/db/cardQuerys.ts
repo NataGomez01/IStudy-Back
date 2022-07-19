@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '.prisma/client'
 const prisma = new PrismaClient()
 
 export class querys {
@@ -48,7 +48,6 @@ export class querys {
                 data : {
                     image_url: image,
                     title: title,
-                    answer: answer,
                     category: {
                         connect: {
                             id: id_category
@@ -68,7 +67,6 @@ export class querys {
                     id_User: id_user,
                     image_url: image === undefined ? 'Card-Image' : image,
                     title: title,
-                    answer: answer,
                     category: {
                         connect: {
                             id: id_category
