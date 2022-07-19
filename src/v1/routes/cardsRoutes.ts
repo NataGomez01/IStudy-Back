@@ -12,10 +12,13 @@ CARDS
 // GETS
 .get('/all', controller.getAllCards)
 .get('/:userId', controller.getUserCards)
+.get('/one/:cardId', controller.getOneCard)
 // POSTS
 .post('/', controller.createNewCard)
+.post('/answers/:cardId', controller.createAnswers)
 // PUTS
-.put('/:cardId', controller.updateOneCard)
+.put('/info/:cardId', controller.updateOneCard)
+.put('/answer/:answerId', controller.updateOneAnswer)
 // DELETES
 .delete('/:cardId', controller.deleteOneCard)
 

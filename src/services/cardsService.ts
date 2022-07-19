@@ -9,13 +9,16 @@ interface card {
     id_user: number, 
     id_category: number, 
     title : string, 
-    answer: string,
     image: string,
   }
 
 export class cardsService {
   async getAllCards() {
     return await db.allCards()
+  };
+
+  async getOneCard(id: number) {
+    return await db.oneCard(id)
   };
 
   async getUserCards(id: number) {
@@ -28,10 +31,25 @@ export class cardsService {
     }
   };
 
-  async createNewCard({id_user, id_category, title, answer, image}: card) {
+  async createNewCard({id_user, id_category, title, image}: card) {
     try {
-        const createCard = await db.cardCreate(image, id_user, id_category, title, answer)
+        const createCard = await db.cardCreate(image, id_user, id_category, title)
         return {"status": 200, createCard}
+    } catch (e) {
+        console.log(e)
+        return e
+    }
+  };
+
+  async createAnswers(id: number, arrayAnswers: Array<any>) {
+    console.log(arrayAnswers.length)
+    try {
+        for(let i = 0; i < arrayAnswers.length; i++) {
+            let question = arrayAnswers[i].question
+            let answer = arrayAnswers[i].answer
+            await db.AnswerCreate(id, question, answer)
+        }
+        return {"status": 200}
     } catch (e) {
         console.log(e)
         return e
@@ -40,8 +58,18 @@ export class cardsService {
   
   async updateOneCard(id:number, {id_category, image, title, answer}) {
     try {
-        const updateCard = await db.cardUpdate(id, id_category, image, title, answer)
+        const updateCard = await db.cardUpdate(id, id_category, image, title)
         return {"status": 200, updateCard}
+    } catch (e) {
+        console.log(e)
+        return e
+    }
+  };
+
+  async updateOneAnswer(id:number, {question, answer}) {
+    try {
+        const updateAnswer = await db.answerUpdate(id, question, answer)
+        return {"status": 200, updateAnswer}
     } catch (e) {
         console.log(e)
         return e
