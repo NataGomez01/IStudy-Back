@@ -33,7 +33,8 @@ export class querys {
                   id: Number(id)
                 },
                 include: {
-                    card_Answer: true
+                    card_Answer: true,
+                    category: true
                 }
             })
         } catch (err) {
@@ -46,6 +47,9 @@ export class querys {
             return await prisma.user_Cards.findMany({ 
                 where: {
                   id_User: Number(id)
+                },
+                include: {
+                    category: true
                 }
             })
         } catch (err) {
