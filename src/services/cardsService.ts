@@ -14,11 +14,13 @@ interface card {
 
 export class cardsService {
   async getAllCards() {
-    return await db.allCards()
+    const res = await db.allCards()
+    return {"status": 200, res}
   };
 
   async getOneCard(id: number) {
-    return await db.oneCard(id)
+    const res = await db.oneCard(id)
+    return {"status": 200, res} 
   };
 
   async getUserCards(id: number) {
@@ -26,8 +28,8 @@ export class cardsService {
     if (userById === null) {
         return error.errorIncorrectsDatas('id')
     } else {
-        const userById = await db.userCards(id)
-        return userById
+        const res = await db.userCards(id)
+        return {"status": 200, res}
     }
   };
 
