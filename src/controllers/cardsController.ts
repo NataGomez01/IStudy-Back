@@ -8,17 +8,17 @@ const service = new cardsService()
 export class cardsController {
     async getAllCards(req: Request, res: Response): Promise<void> {
         const getAllCards = await service.getAllCards()
-        res.json(getAllCards);
+        res.status(200).json(getAllCards);
       };
 
       async getOneCard(req: Request, res: Response): Promise<void> {
         const getOneCards = await service.getOneCard(Number(req.params.cardId))
-        res.json(getOneCards);
+        res.status(200).json(getOneCards);
       };
       
       async getUserCards(req: Request, res: Response): Promise<void> {
         const getCardMedals = await service.getUserCards(Number(req.params.userId))
-        res.json(getCardMedals);
+        res.status(200).json(getCardMedals);
       };
       
       async createNewCard(req: Request, res: Response): Promise<void> {
@@ -44,7 +44,7 @@ export class cardsController {
           error.errorUndefinedBodys(res)
         } else {
             const updateOneCard = await service.updateOneCard(Number(req.params.cardId), req.body)
-            res.json(updateOneCard);
+            res.status(200).json(updateOneCard);
         }
       };
 
@@ -53,12 +53,12 @@ export class cardsController {
           error.errorUndefinedBodys(res)
         } else {
             const updateOneAnswer = await service.updateOneAnswer(Number(req.params.answerId), req.body)
-            res.json(updateOneAnswer);
+            res.status(200).json(updateOneAnswer);
         }
       };
       
       async deleteOneCard(req: Request, res: Response): Promise<void> {
         const deleteCard = await service.deleteOneCard(Number(req.params.cardId))
-        res.json(deleteCard);
+        res.status(200).json(deleteCard);
       };
 }
