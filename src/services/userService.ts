@@ -92,7 +92,7 @@ export class userService {
       return error.errorAlreadyExists('Nome')
     }
   
-    const randomCode = Math.floor(Math.random() * (999999 - 100000) + 100000)
+    const randomCode = Math.floor(Math.random() * (9999 - 1000) + 1000)
   
     const resEmail = await sendEmail(email, randomCode)
   
