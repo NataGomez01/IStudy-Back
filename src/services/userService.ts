@@ -71,7 +71,7 @@ export class userService {
           "data": userByDados,
           "statistics": statistics, 
           "token": token, 
-          "message": "Usuario correto!"
+          "message": "Usuario correto."
         }
       } else {
         return error.errorIncorrectsDatas('senha')
