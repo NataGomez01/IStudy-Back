@@ -49,6 +49,7 @@ export class userService {
     const porncentConcluedMedals = Math.round((userMedals[0].medals.length / allMedals.length) * 100)
     return {
       "status": 200,
+      "type": "userMedals",
       "userMedals": userMedals[0].medals,
       "userNotHaveMedals": filteredMedals,
       "porcent": porncentConcluedMedals
@@ -67,8 +68,9 @@ export class userService {
         const token = jwt.sign(email, process.env.JWT_SECRET)
   
         return {
-          "status": 200, 
+          "status": 200,
           "data": userByDados,
+          "type": "userLogin",
           "statistics": statistics, 
           "token": token, 
           "message": "Usuario correto."
@@ -97,7 +99,7 @@ export class userService {
     const resEmail = await sendEmail(email, randomCode)
   
     if (resEmail === undefined) {
-      return {"status": 200, "code": randomCode}
+      return {"status": 200, "type": "userVerify", "code": randomCode}
     } else {
       return {"status": 201, "message": "Email inválido!"}
     }
@@ -110,7 +112,7 @@ export class userService {
       const randomCode = Math.floor(Math.random() * (9999 - 1000) + 1000)
       const resEmail = await sendEmail(email, randomCode)
       if (resEmail === undefined) {
-        return {"status": 200, "code": randomCode, "email": email}
+        return {"status": 200, "type": "userCode", "code": randomCode, "email": email}
       } else {
         return {"status": 201, "message": "Email inválido!"}
       }  
@@ -125,7 +127,7 @@ export class userService {
     })
   
     if(resToken === undefined) {
-      return {"status": 200} 
+      return {"status": 200, "type": "userToken",} 
     } else {
       return {"status": 201, "message": "Token invalido!"}
     }  
@@ -148,7 +150,7 @@ export class userService {
   
       await db.userUpdatePassword(email, hashPass)
   
-      return {"status": 200, "message":"Senha atualizada com sucesso!"}
+      return {"status": 200, "type": "userChangePass", "message":"Senha atualizada com sucesso!"}
     }
   };
   
@@ -169,6 +171,7 @@ export class userService {
       
       return {
         "status": 200, 
+        "type": "userCreate",
         "data": user,
         "statistics": statistics, 
         "token": token
@@ -182,12 +185,12 @@ export class userService {
     } else {
       const haveSameName = await db.userByName(name)
       if (userById.name === name || haveSameName != null) {
-        return {"status": 201, "message": "O nome tem que ser diferente do anterior, ou nome ja cadastrado!"}
+        return {"status": 201, "type": "userName", "message": "O nome tem que ser diferente do anterior, ou nome ja cadastrado!"}
       } else {
         await db.userUpdateName(userById.id ,name)
       }    
     }
-    return {"status": 200, "message": "nome trocado com sucesso!"}
+    return {"status": 200, "type": "userName", "message": "nome trocado com sucesso!"}
   };
   
   async updateUserMedal(id:number, id_medal:number) {
@@ -210,7 +213,7 @@ export class userService {
     } else {
         await db.userUpdateImage(userById.id ,image)
     }    
-    return {"status": 200, "message": "Imagem atualizada!"}
+    return {"status": 200, "type": "userImage", "message": "Imagem atualizada!"}
   };
   
   async deleteOneUser(id: number) {
