@@ -29,32 +29,33 @@ export class userService {
   };
   
   async getUserMedals(id: number) {
-    const userById = await db.userById(id)
-  if (userById === null) {
-    return error.errorIncorrectsDatas('id')
-  } else {
-    const userMedals = await db.userMedals(id)
-    const allMedals = await db.medals()
-    const idsUserMedals = []
+      const userById = await db.userById(id)
+      if (userById === null) {
+        return error.errorIncorrectsDatas('id')
+      } else {
+        const userMedals = await db.userMedals(id)
+        const allMedals = await db.medals()
+        const idsUserMedals = []
 
-    for (let i = 0; i < userMedals[0].medals.length; i++) {
-      idsUserMedals.push(userMedals[0].medals[i].id)
-    }
+        for (let i = 0; i < userMedals[0].medals.length; i++) {
+          idsUserMedals.push(userMedals[0].medals[i].id)
+        }
 
-    function dontHaveMedal(medal) {
-      return !idsUserMedals.includes(medal.id)
-    }
+        function dontHaveMedal(medal) {
+          return !idsUserMedals.includes(medal.id)
+        }
 
-    const filteredMedals = allMedals.filter(dontHaveMedal)
-    const porncentConcluedMedals = Math.round((userMedals[0].medals.length / allMedals.length) * 100)
-    return {
-      "status": 200,
-      "type": "userMedals",
-      "userMedals": userMedals[0].medals,
-      "userNotHaveMedals": filteredMedals,
-      "porcent": porncentConcluedMedals
-    }
-  }
+        const filteredMedals = allMedals.filter(dontHaveMedal)
+        const porncentConcluedMedals = Math.round((userMedals[0].medals.length / allMedals.length) * 100)
+
+        return {
+          "status": 200,
+          "type": "userMedals",
+          "userMedals": userMedals[0].medals,
+          "userNotHaveMedals": filteredMedals,
+          "porcent": porncentConcluedMedals
+        }
+      }
   };
   
   async getOneUser({email, senha}: user) {
