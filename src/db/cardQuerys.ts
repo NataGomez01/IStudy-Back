@@ -10,7 +10,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     } 
 
@@ -22,7 +22,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
 
@@ -38,7 +38,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -53,8 +53,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
 
@@ -75,7 +74,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
 
@@ -91,7 +90,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -110,8 +109,7 @@ export class querys {
                 }
               })
         } catch(err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
 
@@ -131,7 +129,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
 
@@ -143,8 +141,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
 }

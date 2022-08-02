@@ -6,7 +6,7 @@ export class querys {
         try {
             return await prisma.user.findMany()
         } catch (err) {
-            return err
+            return err.message
         }
     } 
     
@@ -18,7 +18,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -30,7 +30,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -45,7 +45,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -65,7 +65,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -89,8 +89,7 @@ export class querys {
                 }
               })
         } catch(err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
     
@@ -102,8 +101,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
     
@@ -118,8 +116,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
     
@@ -131,7 +128,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -146,7 +143,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -161,7 +158,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            return err
+            return err.message
         }
     }
     
@@ -173,8 +170,7 @@ export class querys {
                 }
             })
         } catch (err) {
-            console.log(err)
-            return err
+            return err.message
         }
     }
     
@@ -182,7 +178,7 @@ export class querys {
         try {
             return await prisma.medals.findMany()
         } catch (err) {
-            return err
+            return err.message
         }
     }
 }
