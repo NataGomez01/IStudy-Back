@@ -73,7 +73,7 @@ export class querys {
         try {
             return await prisma.user.create({
                 data: {
-                    image_url: image === undefined ? 'https://istudy.sfo3.cdn.digitaloceanspaces.com/Avatares/Avatar3.png' : image,
+                    image_url: image === undefined ? 'https://istudy.sfo3.digitaloceanspaces.com/Avatares/Avatar3-removebg-preview.png' : image,
                     name: name,
                     email: email,
                     senha: hashPass,
