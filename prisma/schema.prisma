@@ -42,7 +42,7 @@ model Medals {
 
 model User_Cards {
   id    Int   @id @default(autoincrement())
-  user    User    @relation(fields: [id_User], references: [id])
+  user    User    @relation(fields: [id_User], references: [id], onDelete: Cascade)
   id_User   Int
   category    Categorys[]
   title   String @db.VarChar(255)
@@ -53,7 +53,7 @@ model User_Cards {
 
 model Answers {
   id    Int   @id @default(autoincrement())
-  card_Answer    User_Cards    @relation(fields: [id_Card], references: [id])
+  card_Answer    User_Cards    @relation(fields: [id_Card], references: [id], onDelete: Cascade)
   id_Card   Int
   question   String    @db.VarChar(255)
   answer    String 

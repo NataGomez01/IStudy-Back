@@ -35,8 +35,13 @@ export class cardsService {
 
   async createNewCard({id_user, id_category, title, image}: card) {
     try {
-        const createCard = await db.cardCreate(image, id_user, id_category, title)
-        return {"status": 200, createCard}
+        const userById = await db.userById(id_user)
+        if (userById === null) {
+          return error.errorIncorrectsDatas('id')
+        } else {
+          const createCard = await db.cardCreate(image, id_user, id_category, title)
+          return {"status": 200, createCard}
+        }
     } catch (e) {
         console.log(e)
         return e
