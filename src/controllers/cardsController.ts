@@ -40,10 +40,10 @@ export class cardsController {
       };
       
       async updateOneCard(req: Request, res: Response): Promise<void> {
-        if (req.body.id_category === undefined || req.body.image === undefined || req.body.title === undefined) {
+        if (req.body.title === undefined) {
           error.errorUndefinedBodys(res)
         } else {
-            const updateOneCard = await service.updateOneCard(Number(req.params.cardId), req.body)
+            const updateOneCard = await service.updateOneCard(Number(req.params.cardId), req.body.title)
             res.status(200).json(updateOneCard);
         }
       };

@@ -63,9 +63,9 @@ export class cardsService {
     }
   };
   
-  async updateOneCard(id:number, {id_category, image, title, answer}) {
+  async updateOneCard(id:number, title: string) {
     try {
-        const updateCard = await db.cardUpdate(id, id_category, image, title)
+        const updateCard = await db.cardUpdate(id, title)
         return {"status": 200, updateCard}
     } catch (e) {
         console.log(e)
