@@ -57,20 +57,14 @@ export class querys {
         }
     }
 
-    async cardUpdate(id: number, id_category: number, image: string, title: string) {
+    async cardUpdate(id: number, title: string) {
         try {
             return await prisma.user_Cards.update({
                 where: {
                     id: Number(id)
                 },
                 data : {
-                    image_url: image,
                     title: title,
-                    category: {
-                        connect: {
-                            id: id_category
-                        }
-                    }
                 }
             })
         } catch (err) {
