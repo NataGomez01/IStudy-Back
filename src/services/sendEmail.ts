@@ -23,6 +23,7 @@ export async function sendEmail(email: string, codigo: number) {
       html: `<b>Segue o Código para a verificação:</b><p>${codigo}</p>`, // html body
     });
   } catch (e) {
+    console.log(e)
     return e
   }
 }

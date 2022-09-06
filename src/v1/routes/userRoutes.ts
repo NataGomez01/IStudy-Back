@@ -10,7 +10,7 @@ import { keyVerification } from "../../middlewares/keyVerification"
 USERS
 .use(keyVerification)
 // GETS
-.get('/all', controller.getAllUsers)
+.get('/top', controller.getTopUsers)
 .get('/achievement/all', controller.getAllMedals)
 .get('/achievement/:userId', controller.getUserMedals)
 .post('/login', controller.getOneUser)

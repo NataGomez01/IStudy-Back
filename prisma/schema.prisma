@@ -19,6 +19,7 @@ model User {
   senha   String    @db.VarChar(255)
   statistics Statiscs[]
   cards   User_Cards[]
+  events  Calendar[]
   createdAt   DateTime    @default(now())
 }
 
@@ -67,7 +68,7 @@ model Cards {
   image_url String    @db.VarChar(1000)
   title   String    @db.VarChar(255)
   questions   Questions[]
-  played_times    Int
+  stars    Int
   createdAt   DateTime    @default(now())
 }
 
@@ -88,4 +89,13 @@ model Questions {
   letter_c    String    @db.VarChar(255)
   letter_d    String    @db.VarChar(255)
   correct_letter    String   @db.VarChar(1)
+}
+
+// CALENDAR
+model Calendar {
+    id    Int   @id @default(autoincrement())
+    user_Events   User    @relation(fields: [id_User], references: [id], onDelete: Cascade)
+    id_User Int
+    date  String
+    desc String
 }

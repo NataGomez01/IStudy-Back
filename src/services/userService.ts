@@ -20,8 +20,11 @@ type email = {
 }
 
 export class userService {
-  async getAllUsers() {
-    return await db.allUsers()
+  async getTopUsers() {
+    const statistics = await db.topUsers()
+    const tops = statistics.sort((x: {wins: number}, y: {wins: number}) => y.wins - x.wins)
+    const top10 = tops.slice(0, 10)
+    return top10
   };
   
   async getAllMedals() {

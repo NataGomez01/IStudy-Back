@@ -2,9 +2,13 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export class querys {
-    async allUsers() {
+    async topUsers() {
         try {
-            return await prisma.user.findMany()
+            return await prisma.statiscs.findMany({
+                include: {
+                    user: true
+                }
+            })
         } catch (err) {
             return err.message
         }
@@ -73,7 +77,7 @@ export class querys {
         try {
             return await prisma.user.create({
                 data: {
-                    image_url: image === undefined ? 'https://istudy.sfo3.digitaloceanspaces.com/Avatares/Avatar3-removebg-preview.png' : image,
+                    image_url: image === undefined ? 'https://firebasestorage.googleapis.com/v0/b/istudy-f79b7.appspot.com/o/avatares%2FAvatar9-removebg-preview.png?alt=media&token=550d7b83-7ed2-4550-85c1-29bd4586581f' : image,
                     name: name,
                     email: email,
                     senha: hashPass,

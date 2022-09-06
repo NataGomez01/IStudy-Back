@@ -6,9 +6,9 @@ const error = new routesError()
 const service = new userService()
 
 export class userController {
-  async getAllUsers(req: Request, res: Response): Promise<void> {
-    const getAllUsers = await service.getAllUsers()
-    res.json(getAllUsers);
+  async getTopUsers(req: Request, res: Response): Promise<void> {
+    const getTopUsers = await service.getTopUsers()
+    res.json(getTopUsers);
   };
 
   async getAllMedals(req: Request, res: Response): Promise<void> {
