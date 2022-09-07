@@ -18,6 +18,18 @@ export class cardsService {
     return {"status": 200, res}
   };
 
+  async getTopCards() {
+    const statistics = await db.topCards()
+    const tops = statistics.sort((x: {stars: number}, y: {stars: number}) => y.stars - x.stars)
+    const top3 = tops.slice(0, 3)
+    return {"status": 200, top3}
+  };
+
+  async getQuestions(id: number) {
+    const res = await db.questionCard(id)
+    return {"status": 200, res}
+  };
+
   async getOneCard(id: number) {
     const res = await db.oneCard(id)
     return {"status": 200, res} 
@@ -70,6 +82,29 @@ export class cardsService {
     } catch (e) {
         console.log(e)
         return e
+    }
+  };
+
+  async updateStarsCard(id:number, userId: number) {
+    const likedUsers = await db.likedUsers(id)
+    const alreadyLiked = likedUsers.likedUsers.find(user => user.id === userId)
+
+    if(alreadyLiked == undefined) {
+      try {
+        await db.starsUpdate(id, userId)
+        return {"status": 200}
+      } catch (e) {
+        console.log(e)
+        return e
+      } 
+    } else {
+      try {
+        await db.starsDelete(id, userId)
+        return {"status": 200}
+      } catch (e) {
+        console.log(e)
+        return e
+      } 
     }
   };
 

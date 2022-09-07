@@ -24,6 +24,7 @@ USERS
 .put('/achievement/:userId', controller.updateMedals)
 .put('/password/:userEmail', controller.changePassword)
 .put('/image/:userId', controller.updateImage)
+.put('/stats/:userId', controller.updateStats)
 // DELETES
 .delete('/:userId', controller.deleteOneUser)
 

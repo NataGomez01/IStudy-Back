@@ -5,8 +5,94 @@ export class querys {
     async allCards() {
         try {
             return await prisma.cards.findMany({
-                select: {
+                include: {
+                    category: true
+                }
+            })
+        } catch (err) {
+            return err.message
+        }
+    } 
+
+    async topCards() {
+        try {
+            return await prisma.cards.findMany()
+        } catch (err) {
+            return err.message
+        }
+    }
+
+    async questionCard(id: number) {
+        try {
+            return await prisma.cards.findMany({
+                where: {
+                    id: id
+                },
+                include: {
                     questions: true
+                }
+            })
+        } catch (err) {
+            return err.message
+        }
+    }
+
+    async likedUsers(id: number) {
+        try {
+            return await prisma.cards.findUnique({
+                where: {
+                    id: id
+                },
+                select: {
+                    likedUsers:  {
+                        select: {
+                            id: true
+                        }
+                    }
+                }
+            })
+        } catch (err) {
+            return err.message
+        }
+    }
+
+    async starsDelete(id: number, userId: number) {
+        try {
+            return await prisma.cards.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    stars: {
+                        decrement: 1
+                    },
+                    likedUsers: {
+                        disconnect: {
+                            id: userId
+                        }
+                    }
+                }
+            })
+        } catch (err) {
+            return err.message
+        }
+    } 
+
+    async starsUpdate(id: number, userId: number) {
+        try {
+            return await prisma.cards.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    stars: {
+                        increment: 1
+                    },
+                    likedUsers: {
+                        connect: {
+                            id: userId
+                        }
+                    }
                 }
             })
         } catch (err) {

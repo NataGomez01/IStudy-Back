@@ -18,7 +18,8 @@ model User {
   email   String    @db.VarChar(255)
   senha   String    @db.VarChar(255)
   statistics Statiscs[]
-  cards   User_Cards[]
+  userCards   User_Cards[]
+  likedCards    Cards[]
   events  Calendar[]
   createdAt   DateTime    @default(now())
 }
@@ -68,6 +69,7 @@ model Cards {
   image_url String    @db.VarChar(1000)
   title   String    @db.VarChar(255)
   questions   Questions[]
+  likedUsers    User[]
   stars    Int
   createdAt   DateTime    @default(now())
 }
@@ -83,7 +85,8 @@ model Questions {
   id    Int   @id @default(autoincrement())
   card    Cards    @relation(fields: [id_Card], references: [id]) 
   id_Card Int
-  text    String    @db.VarChar(255)
+  text    String    @db.VarChar(1000)  
+  image_url String    @db.VarChar(1000)
   letter_a    String    @db.VarChar(255)
   letter_b    String    @db.VarChar(255)
   letter_c    String    @db.VarChar(255)

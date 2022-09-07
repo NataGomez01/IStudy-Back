@@ -19,6 +19,13 @@ export class querys {
             return await prisma.user.findFirst({ 
                 where: {
                   email: email
+                },
+                include: {
+                    likedCards: {
+                        select: {
+                            id: true
+                        }
+                    }
                 }
             })
         } catch (err) {
@@ -144,6 +151,49 @@ export class querys {
                 },
                 data: {
                     name: name
+                }
+            })
+        } catch (err) {
+            return err.message
+        }
+    }
+
+    async statsUpdate(id: number, type: string) {
+        try {
+            if(type == 'win') {
+                await prisma.statiscs.updateMany({
+                    where: {
+                        id_User: id
+                    },
+                    data: {
+                        wins: {
+                            increment: 1
+                        }
+                    }
+                })
+            } else if (type == 'lose') {
+                await prisma.statiscs.updateMany({
+                    where: {
+                        id_User: id
+                    },
+                    data: {
+                        loses: {
+                            increment: 1
+                        }
+                    }
+                })
+            } else {
+                return "Type don't exists"
+            }
+
+            await prisma.statiscs.updateMany({
+                where: {
+                    id_User: id
+                },
+                data: {
+                playeds: {
+                        increment: 1
+                    }
                 }
             })
         } catch (err) {

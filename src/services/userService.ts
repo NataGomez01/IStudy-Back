@@ -137,6 +137,21 @@ export class userService {
     }  
     
   };
+
+  async updateStats(id:number, type: string) {
+    const userById = await db.userById(id)
+    if (userById === null) {
+      return error.errorIncorrectsDatas('id')
+    } else {
+      try {
+          const updateStats = await db.statsUpdate(id, type)
+          return {"status": 200, updateStats}
+      } catch (e) {
+          console.log(e)
+          return e
+      }
+    }
+  };
   
   async changePassword(senha: string, email: string) {
     const userChangePass = await db.userByEmail(email)

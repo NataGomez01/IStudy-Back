@@ -11,6 +11,8 @@ CARDS
 .use(keyVerification)
 // GETS
 .get('/all', controller.getAllCards)
+.get('/top', controller.getTopCards)
+.get('/questions/:cardId', controller.getQuestions)
 .get('/:userId', controller.getUserCards)
 .get('/one/:cardId', controller.getOneCard)
 // POSTS
@@ -18,7 +20,7 @@ CARDS
 .post('/answers/:cardId', controller.createAnswers)
 // PUTS
 .put('/info/:cardId', controller.updateOneCard)
+.put('/stars/:cardId', controller.updateStarsCard)
 .put('/answer/:answerId', controller.updateOneAnswer)
 // DELETES
 .delete('/:cardId', controller.deleteOneCard)
-

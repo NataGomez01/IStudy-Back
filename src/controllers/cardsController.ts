@@ -11,6 +11,16 @@ export class cardsController {
         res.status(200).json(getAllCards);
       };
 
+    async getTopCards(req: Request, res: Response): Promise<void> {
+      const getTopCards = await service.getTopCards()
+      res.status(200).json(getTopCards);
+    };
+
+    async getQuestions(req: Request, res: Response): Promise<void> {
+        const getQuestions = await service.getQuestions(Number(req.params.cardId))
+        res.status(200).json(getQuestions);
+      };
+
       async getOneCard(req: Request, res: Response): Promise<void> {
         const getOneCards = await service.getOneCard(Number(req.params.cardId))
         res.status(200).json(getOneCards);
@@ -45,6 +55,15 @@ export class cardsController {
         } else {
             const updateOneCard = await service.updateOneCard(Number(req.params.cardId), req.body.title)
             res.status(200).json(updateOneCard);
+        }
+      };
+
+      async updateStarsCard(req: Request, res: Response): Promise<void> {
+        if (req.body.userId === undefined) {
+          error.errorUndefinedBodys(res)
+        } else {
+            const updateStarsCard = await service.updateStarsCard(Number(req.params.cardId), req.body.userId)
+            res.status(200).json(updateStarsCard);
         }
       };
 

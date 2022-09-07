@@ -83,6 +83,15 @@ export class userController {
         res.status(updateOneUser.status).json(updateOneUser);
     }
   };
+
+  async updateStats(req: Request, res: Response): Promise<void> {
+    if (req.body.type === undefined) {
+      error.errorUndefinedBodys(res)
+    } else {
+      const updateStats = await service.updateStats(Number(req.params.userId), req.body.type)
+      res.status(updateStats.status).json(updateStats);
+    }
+  };
   
   async updateMedals(req: Request, res: Response): Promise<void> {
     if (req.body.id_medal === undefined) {
