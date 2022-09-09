@@ -29,7 +29,7 @@ export class calendarService {
       return error.errorIncorrectsDatas('id')
     } else {
       const res = await db.createEvent(id, title, date, desc)
-      return {"status": 200, res}
+      return {"status": 200, create: res}
     }
   };
 
