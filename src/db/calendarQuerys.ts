@@ -14,11 +14,12 @@ export class querys {
         }
     } 
 
-    async createEvent(id: number, date: string, desc: string) {
+    async createEvent(id: number, title: string, date: string, desc: string) {
         try {
             const res = await prisma.calendar.create({
                 data: {
                     id_User: id,
+                    title: title,
                     date: date,
                     desc: desc
                 }
@@ -30,7 +31,7 @@ export class querys {
         }
     } 
 
-    async updateEvent(id: number, date: string, desc: string) {
+    async updateEvent(id: number, title: string, date: string, desc: string) {
         try {
             const res = await prisma.calendar.update({
                 where: {
@@ -38,6 +39,7 @@ export class querys {
                 },
                 data: {
                     date: date,
+                    title: title,
                     desc: desc
                 }
             })

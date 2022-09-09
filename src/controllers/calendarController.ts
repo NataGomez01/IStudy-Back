@@ -12,7 +12,7 @@ export class calendarController {
     };
 
     async createNewEvent(req: Request, res: Response): Promise<void> {
-        if (req.body.id === undefined || req.body.date === undefined || req.body.desc === undefined) {
+        if (req.body.id === undefined || req.body.title === undefined || req.body.date === undefined || req.body.desc === undefined) {
             error.errorUndefinedBodys(res)
         } else {
             const createNewEvent = await service.createNewEvent(req.body)
@@ -21,7 +21,7 @@ export class calendarController {
     };
 
     async updateOneEvent(req: Request, res: Response): Promise<void> {
-        if (req.body.date === undefined || req.body.desc === undefined) {
+        if (req.body.date === undefined || req.body.title === undefined || req.body.desc === undefined) {
             error.errorUndefinedBodys(res)
         } else {
             const updateOneEvent = await service.updateOneEvent(Number(req.params.eventId) ,req.body)

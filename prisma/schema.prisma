@@ -100,5 +100,6 @@ model Calendar {
     user_Events   User    @relation(fields: [id_User], references: [id], onDelete: Cascade)
     id_User Int
     date  String
+    title String
     desc String
 }

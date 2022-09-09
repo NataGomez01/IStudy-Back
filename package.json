@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts --ignore-watch node_modules --exec ts-node-dev src/index.ts",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts",
+    "build": "webpack --config webpack.dev.js"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
