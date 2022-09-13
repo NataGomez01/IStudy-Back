@@ -39,7 +39,7 @@ export class calendarService {
       return error.errorIncorrectsDatas('id')
     } else {
       const res = await db.updateEvent(id, title, date, desc)
-      return {"status": 200, res}
+      return {"status": 200, update: res}
     }
   };
 
@@ -49,7 +49,7 @@ export class calendarService {
       return error.errorIncorrectsDatas('id')
     } else {
       const res = await db.deleteEvent(id)
-      return {"status": 200, res}
+      return {"status": 200, delete: res}
     }
   };
 }
