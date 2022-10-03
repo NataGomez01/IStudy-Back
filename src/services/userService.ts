@@ -145,6 +145,17 @@ export class userService {
     } else {
       try {
           const updateStats = await db.statsUpdate(id, type)
+          if(userById.statistics[0].wins + 1 >= 1) {
+            await db.userUpdateMedal(id, 4)
+          } 
+
+          if(userById.statistics[0].wins + 1 >= 10) {
+            await db.userUpdateMedal(id, 6)
+          } 
+          
+          if(userById.statistics[0].wins + 1 >= 30) {
+            await db.userUpdateMedal(id, 3)
+          }
           return {"status": 200, updateStats}
       } catch (e) {
           console.log(e)

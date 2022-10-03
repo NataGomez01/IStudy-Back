@@ -61,11 +61,10 @@ export class querys {
     }
     
     async userUpdateMedal(id: number, id_medal: number) {
-        const newId = Number(id) - 1
         try {
             return await prisma.statiscs.update({
                 where: {
-                    id: Number(newId)
+                    id: Number(id)
                 },
                 data : {
                     medals: {
@@ -136,6 +135,9 @@ export class querys {
             return await prisma.user.findUnique({ 
                 where: {
                   id: Number(id)
+                },
+                include: {
+                    statistics: true
                 }
             })
         } catch (err) {
